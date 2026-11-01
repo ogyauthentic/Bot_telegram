@@ -1,0 +1,22 @@
+[Unit]
+Description=Toko Pandawa — Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=botuser
+WorkingDirectory=/home/botuser/pandawa-bot
+EnvironmentFile=/home/botuser/pandawa-bot/.env
+ExecStart=/home/botuser/pandawa-bot/venv/bin/gunicorn \
+    --workers 2 \
+    --bind 127.0.0.1:5000 \
+    --timeout 60 \
+    --log-level info \
+    --access-logfile /home/botuser/pandawa-bot/access.log \
+    --error-logfile /home/botuser/pandawa-bot/error.log \
+    "bot:app"
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

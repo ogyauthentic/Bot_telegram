@@ -1,0 +1,56 @@
+[
+  {
+    "id": "p001",
+    "nama": "Kaos Polos Premium",
+    "kategori": "Fashion",
+    "harga": 85000,
+    "stok": 50,
+    "deskripsi": "Kaos cotton combed 30s, tersedia berbagai warna.",
+    "aktif": true
+  },
+  {
+    "id": "p002",
+    "nama": "Celana Chino Slim Fit",
+    "kategori": "Fashion",
+    "harga": 175000,
+    "stok": 30,
+    "deskripsi": "Bahan katun berkualitas, cocok untuk kasual maupun formal.",
+    "aktif": true
+  },
+  {
+    "id": "p003",
+    "nama": "Mie Ayam Spesial (porsi)",
+    "kategori": "Makanan & Minuman",
+    "harga": 18000,
+    "stok": 100,
+    "deskripsi": "Mie ayam kuah spesial dengan topping lengkap.",
+    "aktif": true
+  },
+  {
+    "id": "p004",
+    "nama": "Es Teh Manis",
+    "kategori": "Makanan & Minuman",
+    "harga": 5000,
+    "stok": 200,
+    "deskripsi": "Minuman segar teh manis dingin.",
+    "aktif": true
+  },
+  {
+    "id": "p005",
+    "nama": "Earphone Bluetooth",
+    "kategori": "Elektronik",
+    "harga": 120000,
+    "stok": 20,
+    "deskripsi": "Earphone wireless TWS, baterai tahan 4 jam.",
+    "aktif": true
+  },
+  {
+    "id": "p006",
+    "nama": "Kabel Data Type-C 1m",
+    "kategori": "Elektronik",
+    "harga": 25000,
+    "stok": 80,
+    "deskripsi": "Kabel data & charging, nilon anti-kusut.",
+    "aktif": true
+  }
+]
