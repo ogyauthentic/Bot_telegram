@@ -1,0 +1,6 @@
+.env
+pandawa.log
+data/orders.json
+__pycache__/
+*.pyc
+venv/
