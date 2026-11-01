@@ -2,14 +2,47 @@
 Konfigurasi global Toko Pandawa
 """
 import os
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - optional dependency in runtime env
+    def load_dotenv(*_args, **_kwargs):
+        return False
+
 
 load_dotenv()
 
+
+def _read_int(name: str, default: int = 0) -> int:
+    raw = os.getenv(name, "")
+    if raw is None or raw == "":
+        return default
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return default
+
+
+def _read_admin_ids() -> list[int]:
+    raw = os.getenv("ADMIN_IDS", "")
+    if not raw:
+        return []
+    ids: list[int] = []
+    for item in raw.split(","):
+        value = item.strip()
+        if not value:
+            continue
+        try:
+            ids.append(int(value))
+        except ValueError:
+            continue
+    return ids
+
+
 # ─── Telegram ─────────────────────────────────────────────────────────────────
-BOT_TOKEN    = os.getenv("BOT_TOKEN", "")
-ADMIN_IDS    = list(map(int, os.getenv("ADMIN_IDS", "").split(","))) if os.getenv("ADMIN_IDS") else []
-ADMIN_GROUP  = int(os.getenv("ADMIN_GROUP_ID", "0"))   # Chat ID grup/channel admin
+BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
+ADMIN_IDS = _read_admin_ids()
+ADMIN_GROUP = _read_int("ADMIN_GROUP_ID", 0)  # Chat ID grup/channel admin
 
 # ─── Toko ─────────────────────────────────────────────────────────────────────
 TOKO_NAMA    = "Toko Pandawa"

@@ -17,13 +17,10 @@ from checkout import register_checkout_handlers
 # ─── Env ─────────────────────────────────────────────────────────────────────
 load_dotenv()
 
-BOT_TOKEN   = os.getenv("BOT_TOKEN", "")
-WEBHOOK_URL = os.getenv("WEBHOOK_URL", "")
-SECRET_PATH = os.getenv("SECRET_PATH", "pandawa_webhook")
-PORT        = int(os.getenv("PORT", 5000))
-
-if not BOT_TOKEN:
-    raise RuntimeError("BOT_TOKEN belum di-set di .env!")
+BOT_TOKEN   = os.getenv("BOT_TOKEN", "").strip()
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "").strip()
+SECRET_PATH = os.getenv("SECRET_PATH", "pandawa_webhook").strip()
+PORT        = int(os.getenv("PORT", "5000"))
 
 # ─── Logging ─────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -37,7 +34,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ─── Bot & App ────────────────────────────────────────────────────────────────
-bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML")
+BOT_TOKEN_FOR_INIT = BOT_TOKEN or "0000000000:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+bot = telebot.TeleBot(BOT_TOKEN_FOR_INIT, parse_mode="HTML")
 app = Flask(__name__)
 
 # Daftarkan semua handler
@@ -61,6 +59,11 @@ def health():
 
 # ─── Main ────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
+    if not BOT_TOKEN:
+        raise RuntimeError("BOT_TOKEN belum di-set di .env!")
+    if not WEBHOOK_URL:
+        raise RuntimeError("WEBHOOK_URL belum di-set di .env!")
+
     url = f"{WEBHOOK_URL.rstrip('/')}/{SECRET_PATH}"
     bot.remove_webhook()
     bot.set_webhook(url=url)

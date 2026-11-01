@@ -10,11 +10,29 @@ from typing import Optional
 from config import PRODUCTS_FILE, ORDERS_FILE, DATA_DIR
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
+def _resolve_path(path: str) -> str:
+    if os.path.exists(path):
+        return path
+    fallback = os.path.join(os.path.dirname(__file__), os.path.basename(path))
+    if os.path.exists(fallback):
+        return fallback
+    return path
+
+
 def _load(path: str) -> dict | list:
+    path = _resolve_path(path)
     if not os.path.exists(path):
-        return {} if path == ORDERS_FILE else []
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        return {} if path.endswith("orders.json") else []
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read().strip()
+        if not content:
+            return {} if path.endswith("orders.json") else []
+        return json.loads(content)
+    except (json.JSONDecodeError, OSError):
+        return {} if path.endswith("orders.json") else []
+
 
 def _save(path: str, data):
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -99,9 +117,13 @@ def create_order(user_id: int, username: str, nama: str,
     orders[order_id] = order
     _save(ORDERS_FILE, orders)
 
-    # Kurangi stok
+    # Kurangi stok sesuai qty yang dipesan
     for item in cart:
-        update_product(item["product_id"], stok=item["stok_sisa"])
+        product = get_product(item["product_id"])
+        if product is None:
+            continue
+        new_stock = max(product.get("stok", 0) - item["qty"], 0)
+        update_product(item["product_id"], stok=new_stock)
 
     return order
 
